@@ -379,6 +379,8 @@ export interface CompanySettings {
   messengerChannels?: MessengerChannelsConfig;
   officePackProfiles?: OfficePackProfiles;
   officePackHydratedPacks?: string[];
+  hermesApiUrl?: string;
+  hermesApiKey?: string;
 }
 
 export const DEFAULT_SETTINGS: CompanySettings = {

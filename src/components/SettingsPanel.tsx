@@ -8,6 +8,7 @@ import ApiSettingsTab from "./settings/ApiSettingsTab";
 import CliSettingsTab from "./settings/CliSettingsTab";
 import GatewaySettingsTab from "./settings/GatewaySettingsTab";
 import GeneralSettingsTab from "./settings/GeneralSettingsTab";
+import HermesSettingsTab from "./settings/HermesSettingsTab";
 import OAuthSettingsTab from "./settings/OAuthSettingsTab";
 import SettingsTabNav from "./settings/SettingsTabNav";
 import type { AccountDraftMap, AccountDraftPatch, LocalSettings, SettingsTab } from "./settings/types";
@@ -454,6 +455,10 @@ export default function SettingsPanel({
 
       {tab === "gateway" && (
         <GatewaySettingsTab t={t} form={form} setForm={setForm} persistSettings={persistSettings} />
+      )}
+
+      {tab === "hermes" && (
+        <HermesSettingsTab t={t} form={form} setForm={setForm} persistSettings={persistSettings} />
       )}
     </div>
   );

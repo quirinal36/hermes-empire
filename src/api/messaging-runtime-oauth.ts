@@ -382,6 +382,49 @@ export async function getOAuthModels(refresh = false): Promise<Record<string, st
   return j.models;
 }
 
+// Hermes status
+export interface HermesPlatformStatus {
+  state: string;
+  error_code?: string | null;
+  error_message?: string | null;
+  updated_at?: string;
+}
+
+export interface HermesStatus {
+  connected: boolean;
+  api: {
+    url: string;
+    status: "connected" | "disconnected";
+    error: string | null;
+    platform: string | null;
+  };
+  gateway: {
+    state: string | null;
+    active_agents: number;
+    platforms: Record<string, HermesPlatformStatus>;
+    updated_at: string | null;
+  } | null;
+}
+
+export async function getHermesStatus(): Promise<HermesStatus> {
+  return request<HermesStatus>("/api/hermes/status");
+}
+
+export interface HermesDetectedConfig {
+  api_key_found: boolean;
+  api_url: string;
+  enabled: boolean;
+  api_key_preview: string | null;
+}
+
+export async function detectHermesConfig(): Promise<HermesDetectedConfig> {
+  return request<HermesDetectedConfig>("/api/hermes/detect-config");
+}
+
+export async function applyDetectedHermesConfig(overwriteUrl: boolean): Promise<{ ok: boolean; api_url: string }> {
+  return post<{ ok: boolean; api_url: string }>("/api/hermes/apply-detected-config", { overwrite_url: overwriteUrl });
+}
+
 // CLI Models (for CLI provider model selection)
 export async function getCliModels(refresh = false): Promise<Record<string, CliModelInfo[]>> {
   const qs = refresh ? "?refresh=true" : "";
