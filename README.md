@@ -588,6 +588,51 @@ Verify messenger sessions:
 curl -s http://127.0.0.1:8790/api/gateway/targets
 ```
 
+<a id="hermes-integration"></a>
+
+### Hermes Integration Setup
+
+Hermes is a local messenger gateway that runs independently from Claw-Empire. When Hermes is running, the **Hermes** tab in the Settings panel shows the connection status and active gateway platform states.
+
+**Defaults:**
+
+| Item                   | Value                               |
+| ---------------------- | ----------------------------------- |
+| Default port           | `8642`                              |
+| Default URL            | `http://127.0.0.1:8642`             |
+| Config file            | `~/.hermes/config.yaml`             |
+| Gateway state file     | `~/.hermes/gateway_state.json`      |
+
+**`~/.hermes/config.yaml` key fields:**
+
+```yaml
+API_SERVER_ENABLED: true
+API_SERVER_KEY: your-api-key-here
+API_SERVER_PORT: 8642
+API_SERVER_HOST: 127.0.0.1
+```
+
+**Auto-detect (recommended):**
+
+Settings → **Hermes** tab → click **Detect**. Claw-Empire reads `API_SERVER_KEY` from `~/.hermes/config.yaml` and shows a preview. Click **Apply this config** to save it.
+
+**Manual connection:**
+
+Settings → **Hermes** tab — enter the URL and API Key directly, then click **Save**.
+
+```
+Hermes API URL: http://127.0.0.1:8642
+API Key:        <API_SERVER_KEY value>
+```
+
+**Verify connection:**
+
+```bash
+curl -H "Authorization: Bearer <API_SERVER_KEY>" http://127.0.0.1:8642/health
+```
+
+> **Note:** Set `HERMES_HOME` to override the default home directory (`~/.hermes`) for `config.yaml` and `gateway_state.json` lookup.
+
 <a id="dollar-command-logic"></a>
 
 ### `$` Command -> OpenClaw Chat Delegation Logic
@@ -636,6 +681,7 @@ Copy `.env.example` to `.env`. All secrets stay local — never commit `.env`.
 | `API_AUTH_TOKEN`                       | Recommended              | Bearer token for non-loopback API/WebSocket access                                                                                           |
 | `INBOX_WEBHOOK_SECRET`                 | **Yes for `/api/inbox`** | Shared secret required in `x-inbox-secret` header                                                                                            |
 | `OPENCLAW_CONFIG`                      | Recommended for OpenClaw | Absolute path to `openclaw.json` used for gateway target discovery/chat relay                                                                |
+| `HERMES_HOME`                          | No                       | Override Hermes home directory (default: `~/.hermes`). Changes where `config.yaml` and `gateway_state.json` are looked up.                   |
 | `DB_PATH`                              | No                       | SQLite database path (default: `./claw-empire.sqlite`)                                                                                       |
 | `LOGS_DIR`                             | No                       | Log directory (default: `./logs`)                                                                                                            |
 | `OAUTH_GITHUB_CLIENT_ID`               | No                       | GitHub OAuth App client ID                                                                                                                   |
