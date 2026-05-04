@@ -23,6 +23,7 @@
   <a href="#ai-installation-guide">AI 설치 가이드</a> &middot;
   <a href="docs/releases/v2.0.4.md">릴리즈 노트</a> &middot;
   <a href="#openclaw-integration">OpenClaw 연동</a> &middot;
+  <a href="#hermes-integration">Hermes 연동</a> &middot;
   <a href="#direct-messenger-without-openclaw">직접 메신저</a> &middot;
   <a href="#dollar-command-logic">$ 명령 로직</a> &middot;
   <a href="#주요-기능">주요 기능</a> &middot;
@@ -580,6 +581,51 @@ powershell -ExecutionPolicy Bypass -File .\scripts\openclaw-setup.ps1 -OpenClawC
 curl -s http://127.0.0.1:8790/api/gateway/targets
 ```
 
+<a id="hermes-integration"></a>
+
+### Hermes 연동 셋업
+
+Hermes는 Claw-Empire와 별도로 실행되는 로컬 메신저 게이트웨이입니다. Hermes가 실행 중이면 설정 패널의 **Hermes** 탭에서 연결 상태와 게이트웨이 플랫폼 현황을 확인할 수 있습니다.
+
+**기본 설정값:**
+
+| 항목                  | 값                                  |
+| --------------------- | ----------------------------------- |
+| 기본 포트             | `8642`                              |
+| 기본 URL              | `http://127.0.0.1:8642`             |
+| 설정 파일             | `~/.hermes/config.yaml`             |
+| 게이트웨이 상태 파일  | `~/.hermes/gateway_state.json`      |
+
+**`~/.hermes/config.yaml` 주요 항목:**
+
+```yaml
+API_SERVER_ENABLED: true
+API_SERVER_KEY: your-api-key-here
+API_SERVER_PORT: 8642
+API_SERVER_HOST: 127.0.0.1
+```
+
+**자동 감지 (권장):**
+
+설정 → **Hermes** 탭 → **감지** 버튼을 클릭하면 `~/.hermes/config.yaml`에서 `API_SERVER_KEY`를 자동으로 읽어옵니다. 감지된 키가 표시되면 **이 설정으로 적용** 버튼을 눌러 저장합니다.
+
+**수동 연결:**
+
+설정 → **Hermes** 탭에서 URL과 API Key를 직접 입력한 후 **저장** 버튼을 누릅니다.
+
+```
+Hermes API URL: http://127.0.0.1:8642
+API Key:        <API_SERVER_KEY 값>
+```
+
+**연결 확인:**
+
+```bash
+curl -H "Authorization: Bearer <API_SERVER_KEY>" http://127.0.0.1:8642/health
+```
+
+> **참고:** `HERMES_HOME` 환경변수로 기본 홈 경로(`~/.hermes`)를 변경할 수 있습니다.
+
 <a id="dollar-command-logic"></a>
 
 ### `$` 명령어 기반 OpenClaw 채팅 의뢰 로직
@@ -635,6 +681,7 @@ curl -X POST http://127.0.0.1:8790/api/inbox \
 | `API_AUTH_TOKEN`                       | 권장                          | 루프백 외부 API/WebSocket 접근용 Bearer 토큰                                                                        |
 | `INBOX_WEBHOOK_SECRET`                 | **`/api/inbox` 사용 시 필수** | `x-inbox-secret` 헤더와 일치해야 하는 공유 시크릿                                                                   |
 | `OPENCLAW_CONFIG`                      | OpenClaw 사용 시 권장         | 게이트웨이 타깃 조회/채팅 릴레이에 사용하는 `openclaw.json` 절대경로                                                |
+| `HERMES_HOME`                          | 선택                          | Hermes 홈 디렉토리 경로 (기본값: `~/.hermes`). `config.yaml` 및 `gateway_state.json` 탐색 위치를 변경할 때 사용     |
 | `DB_PATH`                              | 선택                          | SQLite 데이터베이스 경로 (기본값: `./claw-empire.sqlite`)                                                           |
 | `LOGS_DIR`                             | 선택                          | 로그 디렉토리 (기본값: `./logs`)                                                                                    |
 | `OAUTH_GITHUB_CLIENT_ID`               | 선택                          | GitHub OAuth 앱 클라이언트 ID                                                                                       |
