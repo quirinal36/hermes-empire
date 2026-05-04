@@ -23,6 +23,7 @@
   <a href="#ai-installation-guide">AI Install Guide</a> &middot;
   <a href="docs/releases/v2.0.4.md">Release Notes</a> &middot;
   <a href="#openclaw-integration">OpenClaw</a> &middot;
+  <a href="#hermes-integration">Hermes</a> &middot;
   <a href="#direct-messenger-without-openclaw">Direct Messenger</a> &middot;
   <a href="#dollar-command-logic">$ Command</a> &middot;
   <a href="#features">Features</a> &middot;
